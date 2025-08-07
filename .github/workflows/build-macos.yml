@@ -31,6 +31,13 @@ jobs:
         echo "Dataset files:"
         find dataset/ -name "*.data" -o -name "*.names"
     
+    - name: Verify spec files exist
+      run: |
+        echo "Spec files in root directory:"
+        ls -la *.spec
+        echo "macos_version.spec contents:"
+        head -5 macos_version.spec
+    
     - name: Build macOS executable
       run: |
         pyinstaller --clean macos_version.spec
