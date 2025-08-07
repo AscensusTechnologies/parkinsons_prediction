@@ -1,0 +1,71 @@
+name: Build macOS App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Verify dataset exists
+      run: |
+        ls -la dataset/
+        echo "Dataset files:"
+        find dataset/ -name "*.data" -o -name "*.names"
+    
+    - name: Build macOS executable
+      run: |
+        pyinstaller --clean macos_version.spec
+    
+    - name: Verify build output
+      run: |
+        ls -la dist/
+        echo "Checking .app contents:"
+        ls -la "dist/Parkinsons_Predictor.app/"
+    
+    - name: Create DMG (optional)
+      run: |
+        # Install create-dmg
+        brew install create-dmg
+        
+        # Create DMG
+        create-dmg \
+          --volname "Parkinsons Predictor" \
+          --window-pos 200 120 \
+          --window-size 600 400 \
+          --icon-size 100 \
+          --icon "Parkinsons_Predictor.app" 175 120 \
+          --hide-extension "Parkinsons_Predictor.app" \
+          --app-drop-link 425 120 \
+          "Parkinsons-Predictor-macOS.dmg" \
+          "dist/"
+    
+    - name: Upload .app artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: parkinsons-predictor-macos-app
+        path: dist/Parkinsons_Predictor.app
+    
+    - name: Upload DMG artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: parkinsons-predictor-macos-dmg
+        path: Parkinsons-Predictor-macOS.dmg
