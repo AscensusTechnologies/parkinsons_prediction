@@ -54,9 +54,14 @@ Once the build completes successfully:
 ### If Build Fails:
 1. Check "Actions" tab for error details
 2. Common issues:
-   - Missing dataset files
-   - Python dependency conflicts
-   - PyInstaller spec file errors
+   - **Deprecated actions**: We've updated to latest versions (v4/v5)
+   - **Missing dataset files**: Ensure dataset folder is committed
+   - **Python dependency conflicts**: Check requirements.txt
+   - **PyInstaller spec file errors**: Verify macos_version.spec syntax
+
+### If Actions Are Deprecated:
+- ✅ **Fixed**: Updated to `actions/upload-artifact@v4` and `actions/setup-python@v5`
+- If you see deprecation warnings, the workflow will auto-update
 
 ### If App Won't Run on Mac:
 1. **Gatekeeper Issue**: Right-click → "Open" instead of double-click
