@@ -38,41 +38,70 @@ jobs:
         echo "macos_version.spec contents:"
         head -5 macos_version.spec
     
-    - name: Build macOS executable
+    - name: Build macOS executables
       run: |
-        pyinstaller --clean macos_version.spec
+        echo "Building for Apple Silicon (arm64)..."
+        arch -arm64 pyinstaller --clean macos_version.spec
+        echo "Building for Intel (x86_64)..."
+        arch -x86_64 pyinstaller --clean macos_intel.spec
     
     - name: Verify build output
       run: |
         ls -la dist/
-        echo "Checking .app contents:"
+        echo "Checking Apple Silicon .app contents:"
         ls -la "dist/Parkinsons_Predictor.app/"
+        echo "Checking Intel .app contents:"
+        ls -la "dist/Parkinsons_Predictor_Intel.app/"
     
-    - name: Create DMG (optional)
+    - name: Create DMG packages
       run: |
         # Install create-dmg
         brew install create-dmg
         
-        # Create DMG
+        # Create DMG for Apple Silicon
         create-dmg \
-          --volname "Parkinsons Predictor" \
+          --volname "Parkinsons Predictor (Apple Silicon)" \
           --window-pos 200 120 \
           --window-size 600 400 \
           --icon-size 100 \
           --icon "Parkinsons_Predictor.app" 175 120 \
           --hide-extension "Parkinsons_Predictor.app" \
           --app-drop-link 425 120 \
-          "Parkinsons-Predictor-macOS.dmg" \
+          "Parkinsons-Predictor-AppleSilicon.dmg" \
+          "dist/"
+        
+        # Create DMG for Intel
+        create-dmg \
+          --volname "Parkinsons Predictor (Intel)" \
+          --window-pos 200 120 \
+          --window-size 600 400 \
+          --icon-size 100 \
+          --icon "Parkinsons_Predictor_Intel.app" 175 120 \
+          --hide-extension "Parkinsons_Predictor_Intel.app" \
+          --app-drop-link 425 120 \
+          "Parkinsons-Predictor-Intel.dmg" \
           "dist/"
     
-    - name: Upload .app artifact
+    - name: Upload Apple Silicon .app artifact
       uses: actions/upload-artifact@v4
       with:
-        name: parkinsons-predictor-macos-app
+        name: parkinsons-predictor-apple-silicon-app
         path: dist/Parkinsons_Predictor.app
     
-    - name: Upload DMG artifact
+    - name: Upload Intel .app artifact
       uses: actions/upload-artifact@v4
       with:
-        name: parkinsons-predictor-macos-dmg
-        path: Parkinsons-Predictor-macOS.dmg
+        name: parkinsons-predictor-intel-app
+        path: dist/Parkinsons_Predictor_Intel.app
+    
+    - name: Upload Apple Silicon DMG artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: parkinsons-predictor-apple-silicon-dmg
+        path: Parkinsons-Predictor-AppleSilicon.dmg
+    
+    - name: Upload Intel DMG artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: parkinsons-predictor-intel-dmg
+        path: Parkinsons-Predictor-Intel.dmg

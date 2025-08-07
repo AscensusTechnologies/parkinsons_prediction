@@ -34,7 +34,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Parkinsons_Predictor_macOS',
+    name='Parkinsons_Predictor_Intel',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -44,7 +44,7 @@ exe = EXE(
     console=False,  # GUI version for macOS
     disable_windowed_traceback=False,
     argv_emulation=False,
-    target_arch='arm64',  # Target Apple Silicon (most modern Macs)
+    target_arch='x86_64',  # Target Intel Macs
     codesign_identity=None,
     entitlements_file=None,
     icon=None  # Add icon='icon.icns' if you have an icon file
@@ -53,7 +53,7 @@ exe = EXE(
 # Create .app bundle (macOS specific)
 app = BUNDLE(
     exe,
-    name='Parkinsons_Predictor.app',
+    name='Parkinsons_Predictor_Intel.app',
     icon=None,  # Add icon='icon.icns' if you have an icon file
     bundle_identifier='com.ascensus.parkinsons-predictor',
     version='1.0.0',
