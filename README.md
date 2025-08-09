@@ -65,7 +65,8 @@ pyinstaller macos_version.spec
 MIT License - No Rights Reserved
 
 **Powered by tinybolt by Ascensus**
-remix of https://data-flair.training/blogs/python-machine-learning-project-detecting-parkinson-disease/ (the code was depriciated, it is now fixed and the algo was made better)
+remix of data-flair.training's version (the code was depriciated, it is now fixed and the algo was made better i think?)
 High precision for Parkinson's (94%) - Few false positives
 
 The model is slightly conservative with healthy predictions (71% recall)
+
