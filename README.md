@@ -64,9 +64,10 @@ pyinstaller macos_version.spec
 ## 📜 License
 MIT License - No Rights Reserved
 
-**Powered by tinybolt by Ascensus**
+**Made at AscensusTechnologiesAB**<br>
 remix of data-flair.training's version (the code was depriciated, it is now fixed and the algo was made better i think?)
 High precision for Parkinson's (94%) - Few false positives
 
 The model is slightly conservative with healthy predictions (71% recall)
+
 
